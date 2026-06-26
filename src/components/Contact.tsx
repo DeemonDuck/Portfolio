@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Github, Linkedin, Mail, FileDown } from "lucide-react";
+import { GitFork, Link2, Mail, FileDown } from "lucide-react";
 
 export default function Contact() {
   return (
@@ -39,7 +39,7 @@ export default function Contact() {
             onMouseEnter={(e) => { e.currentTarget.style.color = "white"; e.currentTarget.style.borderColor = "#6c63ff"; }}
             onMouseLeave={(e) => { e.currentTarget.style.color = "#8888aa"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)"; }}
           >
-            <Linkedin size={16} />
+            <Link2 size={16} />
             LinkedIn
           </a>
           <a
@@ -51,7 +51,7 @@ export default function Contact() {
             onMouseEnter={(e) => { e.currentTarget.style.color = "white"; e.currentTarget.style.borderColor = "#6c63ff"; }}
             onMouseLeave={(e) => { e.currentTarget.style.color = "#8888aa"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)"; }}
           >
-            <Github size={16} />
+            <GitFork size={16} />
             GitHub
           </a>
           <a

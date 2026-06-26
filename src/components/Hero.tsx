@@ -11,7 +11,7 @@ const sentence = {
 
 const letter = {
   hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { type: "spring", damping: 14 } },
+  visible: { opacity: 1, y: 0, transition: { type: "spring" as const, damping: 14 } },
 };
 
 const headline = "I build software that solves real problems.";
