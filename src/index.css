@@ -1,14 +1,51 @@
 @import "tailwindcss";
 
+/* ===========================================================
+   Obsidian Precision — design tokens (Tailwind v4 @theme)
+   Exposes utilities like bg-surface, text-on-surface-variant,
+   border-outline-variant, text-primary-container, etc.
+   =========================================================== */
+@theme {
+  --color-surface: #101415;
+  --color-surface-dim: #101415;
+  --color-surface-bright: #363a3b;
+  --color-surface-container-lowest: #0b0f10;
+  --color-surface-container-low: #191c1e;
+  --color-surface-container: #1d2022;
+  --color-surface-container-high: #272a2c;
+  --color-surface-container-highest: #323537;
+
+  --color-on-surface: #e0e3e5;
+  --color-on-surface-variant: #b9cbbb;
+
+  --color-outline: #849586;
+  --color-outline-variant: #3b4b3e;
+
+  --color-primary: #f2fff1;
+  --color-on-primary: #00391d;
+  --color-primary-container: #00ff94;
+  --color-on-primary-container: #00713f;
+  --color-primary-fixed-dim: #00e383;
+
+  --color-secondary: #d1bcff;
+  --color-on-secondary: #3c0090;
+  --color-secondary-container: #7000ff;
+  --color-on-secondary-container: #ddcdff;
+
+  --color-background: #101415;
+  --color-on-background: #e0e3e5;
+
+  --font-geist: "Geist", system-ui, sans-serif;
+
+  --radius-bento: 24px;
+}
+
+/* ===========================================================
+   Base
+   =========================================================== */
 @layer base {
   :root {
-    --bg: #0a0a0f;
-    --surface: #111118;
-    --border: rgba(255, 255, 255, 0.08);
-    --accent: #6c63ff;
-    --accent-2: #ff6584;
-    --text: #f0f0f5;
-    --muted: #8888aa;
+    color-scheme: dark;
   }
 
   * {
@@ -17,45 +54,208 @@
 
   html {
     scroll-behavior: smooth;
-    background: var(--bg);
-    color: var(--text);
   }
 
   body {
     margin: 0;
-    font-family: 'Inter', system-ui, sans-serif;
-    background: var(--bg);
+    font-family: var(--font-geist);
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 
   ::-webkit-scrollbar {
-    width: 4px;
+    width: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--bg);
+    background: var(--color-surface);
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--accent);
-    border-radius: 2px;
+    background: var(--color-primary-container);
+    border-radius: 3px;
+    opacity: 0.6;
   }
-
   ::selection {
-    background: var(--accent);
-    color: white;
+    background: var(--color-primary-container);
+    color: var(--color-on-primary-container);
   }
 }
 
-@layer utilities {
-  .glow {
-    box-shadow: 0 0 40px rgba(108, 99, 255, 0.3);
+/* ===========================================================
+   Aura background + fluid mouse glow
+   =========================================================== */
+.aurora-bg {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(40% 50% at 20% 30%, rgba(0, 255, 148, 0.16), transparent 60%),
+    radial-gradient(45% 55% at 80% 20%, rgba(112, 0, 255, 0.16), transparent 60%),
+    radial-gradient(50% 60% at 60% 80%, rgba(0, 227, 131, 0.12), transparent 60%),
+    radial-gradient(40% 50% at 10% 90%, rgba(112, 0, 255, 0.10), transparent 60%);
+  filter: blur(60px) saturate(130%);
+  animation: aurora-drift 24s ease-in-out infinite alternate;
+}
+
+@keyframes aurora-drift {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  50% { transform: translate3d(2%, -2%, 0) rotate(8deg) scale(1.08); }
+  100% { transform: translate3d(-2%, 2%, 0) rotate(-6deg) scale(1.04); }
+}
+
+.aura-blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+  z-index: -1;
+  pointer-events: none;
+  animation: float 20s infinite alternate ease-in-out;
+}
+.aura-primary {
+  background: radial-gradient(circle, var(--color-primary-container) 0%, transparent 70%);
+  width: 800px;
+  height: 800px;
+  top: -200px;
+  left: -200px;
+}
+.aura-secondary {
+  background: radial-gradient(circle, var(--color-secondary-container) 0%, transparent 70%);
+  width: 600px;
+  height: 600px;
+  bottom: -100px;
+  right: -100px;
+  animation-delay: -5s;
+}
+@keyframes float {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(50px, 50px) scale(1.1); }
+}
+
+.mouse-glow {
+  position: fixed;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0, 255, 148, 0.07) 0%, transparent 60%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+  will-change: left, top;
+}
+
+/* ===========================================================
+   Glassmorphism bento card
+   =========================================================== */
+.bento-card {
+  background-color: rgba(29, 32, 34, 0.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(242, 255, 241, 0.15);
+  border-radius: var(--radius-bento);
+  transition: box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+}
+
+.bento-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-bento);
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(0, 227, 131, 0.25) 0%, transparent 50%, rgba(112, 0, 255, 0.15) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.bento-card:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 227, 131, 0.06);
+  border-color: rgba(242, 255, 241, 0.25);
+}
+.bento-card:hover::before {
+  opacity: 1;
+}
+
+/* Cursor-tracking glass highlight (driven by --mouse-x/--mouse-y) */
+.glass-highlight {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.06), transparent 40%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 10;
+  border-radius: var(--radius-bento);
+}
+.bento-card:hover .glass-highlight {
+  opacity: 1;
+}
+
+/* ===========================================================
+   Typography glint + decorative effects
+   =========================================================== */
+.text-glint {
+  background: linear-gradient(to right, #e0e3e5 20%, #00e383 40%, #00e383 60%, #e0e3e5 80%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shine 4s linear infinite;
+}
+@keyframes shine {
+  to { background-position: 200% center; }
+}
+
+.aperture-mask {
+  mask-image: radial-gradient(ellipse at center, black 60%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 60%, transparent 100%);
+}
+
+.hover-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.hover-shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.5s ease;
+  pointer-events: none;
+}
+.hover-shimmer:hover::after {
+  left: 150%;
+}
+
+/* Role rotator */
+@keyframes slideUp {
+  0%, 26% { transform: translateY(0); }
+  33%, 59% { transform: translateY(-48px); }
+  66%, 92% { transform: translateY(-96px); }
+  100% { transform: translateY(-144px); }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .aurora-bg,
+  .aura-blob,
+  .text-glint,
+  .data-flow {
+    animation: none !important;
   }
-  .text-gradient {
-    background: linear-gradient(135deg, #6c63ff, #ff6584);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .noise {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  html {
+    scroll-behavior: auto;
   }
 }
