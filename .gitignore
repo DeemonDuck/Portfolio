@@ -40,3 +40,7 @@ Thumbs.db
 # OS files
 .DS_Store
 desktop.ini
+
+# Stitch design-source artifacts (kept locally, not part of the app)
+stitch_export/
+*.zip
