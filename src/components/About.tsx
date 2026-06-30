@@ -1,103 +1,117 @@
 import { motion } from "framer-motion";
-import { GitFork, Link2, Mail } from "lucide-react";
+import { GitFork, Link2, Mail, Download, BrainCircuit } from "lucide-react";
 
-const skills = [
-  { label: "Deep Learning", detail: "CNN, BiLSTM, Attention, TensorFlow/Keras" },
-  { label: "ML Engineering", detail: "Scikit-learn, XGBoost, LightGBM, CatBoost" },
-  { label: "Python Backend", detail: "FastAPI, SQLAlchemy, Pydantic, SQLite" },
-  { label: "Data & Pipelines", detail: "Pandas, NumPy, feature engineering, CI/CD" },
-  { label: "Frontend", detail: "React, TypeScript, Tailwind, Vite" },
-  { label: "Deployment", detail: "Railway, Hugging Face Spaces, Streamlit Cloud" },
+const timeline = [
+  {
+    title: "Final-year B.Tech — CSE (AI/ML)",
+    meta: "Present",
+    body: "Specializing in machine learning and deep learning, with a focus on building systems that actually ship and get deployed — not just notebooks.",
+    accent: "primary" as const,
+  },
+  {
+    title: "Building & shipping in public",
+    meta: "Ongoing",
+    body: "8+ deployed projects spanning deep learning pipelines, ML engineering, full-stack apps, and automation — each documented with the engineering decisions behind it.",
+    accent: "secondary" as const,
+  },
+  {
+    title: "Open to opportunities",
+    meta: "Now",
+    body: "Looking for full-time roles and internships where I can build ML and full-stack systems that reach production.",
+    accent: "muted" as const,
+  },
+];
+
+const dot = {
+  primary: "bg-primary-container shadow-[0_0_10px_rgba(0,255,148,0.8)]",
+  secondary: "bg-secondary-container shadow-[0_0_10px_rgba(112,0,255,0.8)]",
+  muted: "bg-surface-bright border-2 border-outline-variant",
+};
+
+const socials = [
+  { icon: GitFork, href: "https://github.com/DeemonDuck", label: "GitHub" },
+  { icon: Link2, href: "https://www.linkedin.com/in/ridham-taneja/", label: "LinkedIn" },
+  { icon: Mail, href: "mailto:ridham643@gmail.com", label: "Email" },
 ];
 
 export default function About() {
   return (
-    <section id="about" className="py-32 px-6 max-w-5xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-        {/* Text */}
+    <section id="about" className="mb-32">
+      <motion.h2
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="text-2xl font-semibold text-primary mb-8 pl-4 border-l-2 border-primary-container"
+      >
+        Trajectory
+      </motion.h2>
+
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+        {/* Timeline */}
         <motion.div
-          initial={{ opacity: 0, x: -40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          className="bento-card col-span-1 md:col-span-7 p-8 md:p-10"
         >
-          <p className="text-sm uppercase tracking-widest mb-4 font-medium" style={{ color: "#6c63ff" }}>
-            About
-          </p>
-          <h2 className="text-3xl font-bold text-white mb-6">Ridham Taneja</h2>
-          <p className="text-base leading-relaxed mb-4" style={{ color: "#aaaacc" }}>
-            Final-year B.Tech CSE (AI/ML) student who builds shipped, deployed projects instead of just theory.
-            My work spans deep learning pipelines, automation systems, full-stack applications, and ML experiments —
-            the common thread is solving real problems and shipping something people can actually use.
-          </p>
-          <p className="text-base leading-relaxed mb-8" style={{ color: "#8888aa" }}>
-            I care deeply about engineering decisions — why an architecture was chosen, what tradeoffs were made,
-            and how a system holds up in production. Every project on this site documents that reasoning.
+          {timeline.map((item, i) => (
+            <div key={item.title} className={`relative pl-12 ${i < timeline.length - 1 ? "pb-8" : ""}`}>
+              {i < timeline.length - 1 && (
+                <span className="absolute left-[19px] top-3 bottom-0 w-[2px] bg-gradient-to-b from-primary-container/40 to-transparent" />
+              )}
+              <span className={`absolute left-[14px] top-1.5 w-3 h-3 rounded-full ${dot[item.accent]}`} />
+              <h3 className="text-xl font-semibold text-on-surface mb-1">{item.title}</h3>
+              <p className="font-mono text-sm text-primary-container mb-3">{item.meta}</p>
+              <p className="text-on-surface-variant leading-relaxed">{item.body}</p>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Profile card */}
+        <motion.div
+          initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.9, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="bento-card col-span-1 md:col-span-5 p-8 md:p-10 flex flex-col items-center text-center"
+        >
+          <div className="w-28 h-28 rounded-full mb-7 bg-surface-container-high border-2 border-primary/30 p-2 shadow-[0_0_30px_rgba(0,227,131,0.2)]">
+            <div className="w-full h-full rounded-full bg-surface flex items-center justify-center">
+              <BrainCircuit size={52} className="text-primary-container" />
+            </div>
+          </div>
+          <h3 className="text-2xl font-bold text-on-surface mb-3">Ridham Taneja</h3>
+          <p className="text-on-surface-variant leading-relaxed mb-7">
+            I build shipped, deployed projects instead of just theory — and I care deeply
+            about engineering decisions: why an architecture was chosen, what tradeoffs were
+            made, and how it holds up in production.
           </p>
 
-          {/* Social links */}
-          <div className="flex items-center gap-4">
-            {[
-              { icon: GitFork, href: "https://github.com/DeemonDuck", label: "GitHub" },
-              { icon: Link2, href: "https://www.linkedin.com/in/ridham-taneja/", label: "LinkedIn" },
-              { icon: Mail, href: "mailto:ridham@example.com", label: "Email" },
-            ].map(({ icon: Icon, href, label }) => (
+          <div className="flex items-center gap-3 mb-7">
+            {socials.map(({ icon: Icon, href, label }) => (
               <a
                 key={label}
                 href={href}
-                target="_blank"
+                target={href.startsWith("http") ? "_blank" : undefined}
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all hover:text-white"
-                style={{
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  color: "#8888aa",
-                  textDecoration: "none",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "#6c63ff";
-                  e.currentTarget.style.color = "white";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
-                  e.currentTarget.style.color = "#8888aa";
-                }}
+                className="w-11 h-11 rounded-full bg-surface-container flex items-center justify-center border border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary hover:shadow-[0_0_15px_rgba(0,227,131,0.3)] transition-all"
               >
-                <Icon size={14} />
-                {label}
+                <Icon size={18} />
               </a>
             ))}
           </div>
-        </motion.div>
 
-        {/* Skills grid */}
-        <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-          className="grid grid-cols-1 gap-3"
-        >
-          {skills.map((s, i) => (
-            <motion.div
-              key={s.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.07 }}
-              className="flex items-start gap-4 p-4 rounded-xl"
-              style={{ background: "#111118", border: "1px solid rgba(255,255,255,0.06)" }}
-            >
-              <div
-                className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
-                style={{ background: "#6c63ff" }}
-              />
-              <div>
-                <p className="text-sm font-semibold text-white">{s.label}</p>
-                <p className="text-xs mt-0.5" style={{ color: "#8888aa" }}>{s.detail}</p>
-              </div>
-            </motion.div>
-          ))}
+          <a
+            href="/resume.pdf"
+            download
+            className="inline-flex items-center gap-2 bg-primary text-on-primary text-sm font-semibold px-7 py-3 rounded-full hover:shadow-[0_0_20px_rgba(0,227,131,0.6)] transition-all duration-300 active:scale-95"
+          >
+            <Download size={16} />
+            Download Resume
+          </a>
         </motion.div>
       </div>
     </section>

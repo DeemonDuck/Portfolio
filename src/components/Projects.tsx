@@ -3,31 +3,31 @@ import { projects } from "../data/projects";
 import ProjectCard from "./ProjectCard";
 
 export default function Projects() {
+  const [featured, ...rest] = projects;
+
   return (
-    <section id="projects" className="py-32 px-6 max-w-6xl mx-auto">
-      {/* Section label */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
+    <section id="work" className="mb-32">
+      <motion.h2
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="mb-20 text-center"
+        className="text-2xl font-semibold text-primary mb-8 pl-4 border-l-2 border-primary-container"
       >
-        <p className="text-sm uppercase tracking-widest mb-4 font-medium" style={{ color: "#6c63ff" }}>
-          Featured Work
-        </p>
-        <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-          Projects That Matter
-        </h2>
-        <p className="max-w-xl mx-auto text-base" style={{ color: "#8888aa" }}>
-          Each project represents a real problem, a deliberate engineering decision, and a measurable outcome.
-        </p>
-      </motion.div>
+        Selected Work
+      </motion.h2>
 
-      {/* Card grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {projects.map((p, i) => (
-          <ProjectCard key={p.id} project={p} index={i} />
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+        {/* Featured project spans full width */}
+        <div className="col-span-1 md:col-span-12">
+          <ProjectCard project={featured} index={0} featured />
+        </div>
+
+        {/* Remaining projects, two per row on desktop */}
+        {rest.map((p, i) => (
+          <div key={p.id} className="col-span-1 md:col-span-6">
+            <ProjectCard project={p} index={i + 1} />
+          </div>
         ))}
       </div>
     </section>

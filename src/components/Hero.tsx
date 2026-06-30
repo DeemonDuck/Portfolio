@@ -1,126 +1,89 @@
-import { motion } from "framer-motion";
-import { ArrowDown } from "lucide-react";
+import { Terminal, MapPin } from "lucide-react";
+import TiltCard from "./TiltCard";
 
-const sentence = {
-  hidden: { opacity: 1 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.04 },
-  },
-};
-
-const letter = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { type: "spring" as const, damping: 14 } },
-};
-
-const headline = "I build software that solves real problems.";
+const roles = ["AI/ML Engineer", "Deep Learning", "Full-Stack Builder"];
 
 export default function Hero() {
   return (
-    <section
-      className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden"
-      style={{ paddingTop: "80px" }}
-    >
-      {/* Background grid */}
-      <div
-        className="absolute inset-0 opacity-[0.04] pointer-events-none"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(108,99,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(108,99,255,1) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
+    <section className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-32">
+      {/* Main hero card */}
+      <TiltCard className="col-span-1 md:col-span-8 p-8 md:p-12 flex flex-col justify-end min-h-[400px]">
+        <div style={{ transform: "translateZ(30px)" }}>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary-container mb-5">
+            AI/ML Engineer · Final-year B.Tech CSE (AI/ML)
+          </p>
+          <h1 className="text-[40px] leading-[1.05] sm:text-6xl md:text-[72px] md:leading-[1.05] font-extrabold tracking-tight text-glint mb-5">
+            I build software that
+            <br />
+            solves real problems.
+          </h1>
+          <p className="text-base md:text-lg text-on-surface-variant max-w-xl leading-relaxed">
+            From deep learning pipelines to full-stack systems — everything here is
+            shipped, deployed, and documented. Explore the engineering decisions behind each one.
+          </p>
+        </div>
+      </TiltCard>
 
-      {/* Glow blobs */}
-      <div
-        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, rgba(108,99,255,0.12) 0%, transparent 70%)",
-        }}
-      />
-
-      {/* Intro label */}
-      <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="text-sm uppercase tracking-widest mb-6 font-medium"
-        style={{ color: "#6c63ff" }}
+      {/* Role rotator */}
+      <TiltCard
+        delay={0.1}
+        className="col-span-1 md:col-span-4 p-8 flex flex-col justify-center items-center min-h-[400px] group"
       >
-        AI/ML Engineer · Final-year B.Tech CSE
-      </motion.p>
+        <div className="flex flex-col items-center w-full" style={{ transform: "translateZ(20px)" }}>
+          <Terminal
+            size={48}
+            className="text-primary-container mb-6 group-hover:scale-110 transition-transform"
+          />
+          <div className="h-12 overflow-hidden relative w-full text-center">
+            <div className="absolute w-full animate-[slideUp_6s_infinite]">
+              {[...roles, roles[0]].map((role, i) => (
+                <div
+                  key={i}
+                  className="text-2xl font-semibold h-12 flex items-center justify-center text-primary"
+                >
+                  {role}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </TiltCard>
 
-      {/* Animated headline */}
-      <motion.h1
-        variants={sentence}
-        initial="hidden"
-        animate="visible"
-        className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight max-w-4xl"
-        aria-label={headline}
-      >
-        {headline.split("").map((char, i) => (
-          <motion.span key={i} variants={letter} className="inline-block">
-            {char === " " ? "\u00A0" : char}
-          </motion.span>
-        ))}
-      </motion.h1>
+      {/* Location */}
+      <TiltCard delay={0.2} className="col-span-1 md:col-span-4 p-8 flex items-center">
+        <div className="flex items-center gap-6" style={{ transform: "translateZ(15px)" }}>
+          <div className="w-16 h-16 rounded-full bg-secondary-container/20 flex items-center justify-center border border-secondary/30 shrink-0">
+            <MapPin className="text-secondary" />
+          </div>
+          <div>
+            <div className="text-xs uppercase tracking-[0.2em] text-on-surface-variant mb-1">
+              Based in
+            </div>
+            <div className="text-2xl font-semibold text-on-surface">India</div>
+          </div>
+        </div>
+      </TiltCard>
 
-      {/* Sub-headline */}
-      <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.2 }}
-        className="mt-6 text-lg max-w-xl leading-relaxed"
-        style={{ color: "#8888aa" }}
+      {/* Availability */}
+      <TiltCard
+        delay={0.2}
+        className="col-span-1 md:col-span-8 p-8 flex items-center bg-gradient-to-r from-surface-container/60 to-surface-container-high/60"
       >
-        I build software that matters — from deep learning pipelines to full-stack systems.
-        Everything here is shipped and documented. Explore the engineering decisions behind each one.
-      </motion.p>
-
-      {/* CTA */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.5 }}
-        className="mt-10 flex items-center gap-4"
-      >
-        <a
-          href="#projects"
-          className="group flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-lg glow"
-          style={{ background: "linear-gradient(135deg, #6c63ff, #ff6584)" }}
-        >
-          Explore My Work
-          <ArrowDown size={16} className="group-hover:translate-y-1 transition-transform" />
-        </a>
-        <a
-          href="#about"
-          className="px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:text-white"
-          style={{
-            border: "1px solid rgba(255,255,255,0.15)",
-            color: "#8888aa",
-          }}
-        >
-          About Me
-        </a>
-      </motion.div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-10 flex flex-col items-center gap-2"
-        style={{ color: "#444" }}
-      >
-        <span className="text-xs tracking-widest uppercase">Scroll</span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5 }}
-        >
-          <ArrowDown size={14} />
-        </motion.div>
-      </motion.div>
+        <div className="w-full flex flex-wrap items-center justify-between gap-4" style={{ transform: "translateZ(15px)" }}>
+          <div className="flex items-center gap-4">
+            <span className="w-3 h-3 rounded-full bg-primary-container animate-pulse shadow-[0_0_10px_rgba(0,255,148,0.8)]" />
+            <span className="font-mono text-sm text-primary">
+              Open to full-time roles &amp; internships
+            </span>
+          </div>
+          <a
+            href="#contact"
+            className="border border-outline-variant text-on-surface hover:text-primary hover:border-primary text-xs font-semibold tracking-wide px-6 py-2.5 rounded-full transition-all duration-300"
+          >
+            Get in touch
+          </a>
+        </div>
+      </TiltCard>
     </section>
   );
 }

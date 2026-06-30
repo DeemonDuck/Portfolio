@@ -1,88 +1,96 @@
 import { useRef } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import type { Project } from "../data/projects";
 
-export default function ProjectCard({ project, index }: { project: Project; index: number }) {
+/**
+ * Glassmorphic project card. Featured cards span wider and taller.
+ * Tilts toward the cursor and tracks a glass highlight; click navigates
+ * to the project detail route.
+ */
+export default function ProjectCard({
+  project,
+  index,
+  featured = false,
+}: {
+  project: Project;
+  index: number;
+  featured?: boolean;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [8, -8]), { stiffness: 300, damping: 30 });
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-8, 8]), { stiffness: 300, damping: 30 });
-
-  const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = ref.current!.getBoundingClientRect();
-    x.set((e.clientX - rect.left) / rect.width - 0.5);
-    y.set((e.clientY - rect.top) / rect.height - 0.5);
+  const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    el.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+    el.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
   };
-  const onMouseLeave = () => { x.set(0); y.set(0); };
 
   return (
     <motion.div
       ref={ref}
-      onMouseMove={onMouseMove}
-      onMouseLeave={onMouseLeave}
+      onMouseMove={handleMove}
       onClick={() => navigate(`/project/${project.id}`)}
-      initial={{ opacity: 0, y: 60 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.6, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d", perspective: 1000 }}
-      className="group relative cursor-pointer rounded-2xl p-px overflow-hidden"
+      role="link"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") navigate(`/project/${project.id}`);
+      }}
+      initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.8, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
+      className={`bento-card group cursor-pointer p-8 flex flex-col justify-between ${
+        featured ? "min-h-[340px]" : "min-h-[300px]"
+      }`}
     >
-      {/* Gradient border */}
-      <div
-        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-        style={{ background: `linear-gradient(135deg, ${project.color}66, transparent)` }}
-      />
+      <div className="glass-highlight" />
 
-      {/* Card body */}
-      <div
-        className="relative rounded-2xl p-8 h-full flex flex-col gap-4"
-        style={{ background: "#111118", border: "1px solid rgba(255,255,255,0.07)" }}
-      >
-        {/* Icon + number */}
-        <div className="flex items-start justify-between">
-          <span className="text-4xl">{project.icon}</span>
-          <span className="text-xs font-mono" style={{ color: "#444" }}>
-            0{index + 1}
-          </span>
-        </div>
+      <div className="flex items-start justify-between">
+        <span className="text-4xl" aria-hidden>
+          {project.icon}
+        </span>
+        <span
+          className="text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full border"
+          style={{
+            color: project.color,
+            borderColor: `${project.color}55`,
+            background: `${project.color}14`,
+          }}
+        >
+          {project.category}
+        </span>
+      </div>
 
-        {/* Title */}
-        <h3 className="text-xl font-bold text-white group-hover:text-gradient transition-all">
+      <div className="mt-6">
+        <h3
+          className={`font-bold text-on-surface mb-2 ${featured ? "text-3xl" : "text-2xl"}`}
+        >
           {project.title}
         </h3>
-
-        {/* Tagline */}
-        <p className="text-sm leading-relaxed flex-1" style={{ color: "#8888aa" }}>
+        <p className="text-on-surface-variant text-sm md:text-base leading-relaxed max-w-2xl">
           {project.tagline}
         </p>
 
-        {/* Tech pills */}
-        <div className="flex flex-wrap gap-2">
-          {project.tech.slice(0, 4).map((t) => (
+        <div className="flex flex-wrap gap-2 mt-5">
+          {project.tech.slice(0, featured ? 6 : 4).map((t) => (
             <span
               key={t}
-              className="px-2 py-0.5 rounded text-xs font-mono"
-              style={{ background: `${project.color}18`, color: project.color }}
+              className="px-3 py-1 rounded-full border border-outline-variant font-mono text-xs text-on-surface-variant"
             >
               {t}
             </span>
           ))}
-          {project.tech.length > 4 && (
-            <span className="px-2 py-0.5 rounded text-xs font-mono" style={{ color: "#444" }}>
-              +{project.tech.length - 4}
-            </span>
-          )}
         </div>
 
-        {/* Arrow */}
-        <div className="flex items-center gap-2 text-sm font-medium mt-2" style={{ color: project.color }}>
-          <span>View Project</span>
+        <div
+          className="inline-flex items-center gap-2 mt-6 text-sm font-semibold"
+          style={{ color: project.color }}
+        >
+          View case study
           <ArrowUpRight
             size={16}
             className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
